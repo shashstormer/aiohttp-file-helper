@@ -145,5 +145,16 @@ async def login(request: Request):
         headers={'content-type': 'text/html'})
 
 
+def add_roures():
+    pass
+
+
+app.add_api_route("/", index, methods=['GET', 'POST'])
+app.add_api_route("/upload", upload, methods=['POST'])
+app.add_api_route("/delete", delete, methods=['POST'])
+app.add_api_route("/file", file, methods=['GET'])
+app.add_api_route("/folder", folders, methods=['GET'])
+app.add_api_route("/login", login, methods=['GET'])
+
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8080)
