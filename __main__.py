@@ -158,4 +158,4 @@ async def middlewares(request: web.Request, handler):
 app.middlewares.append(middlewares)
 
 if __name__ == '__main__':
-    web.run_app(app)
+    web.run_app(app, port=443)
