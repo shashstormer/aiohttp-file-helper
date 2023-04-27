@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Filez - Quick Upload and Download</title>
+</head>
+<body>
+<h1>Welcom to Filez a quick way to share files across devices</h1>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" max_file_size="10000000" name="files" multiple><br><br>
+                <button type="submit">Upload file(s)</button>
+            </form>
+            <br><br>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" name="files" max_file_size="10000000" accept="*/*, !video/*, !application/*" webkitdirectory directory multiple value="upload dirs"><br><br>
+                <button type="submit">Upload dir(s)</button>
+            </form>
+            <br><br>
+            <form action="/delete" method="POST">
+                <input type="text" name="filename" placeholder="Enter filename"><br><br>
+                <button type="submit">Delete</button>
+            </form>
+            <br><br>
+            <ul style="border: 3px solid black;width:80%;margin: auto;display: flex; flex-wrap: wrap;justify-content: space-between;list-style: none;">
+                {}
+            </ul>
+<br><br><br><br><br><br>
+<footer style="border: 1px solid black">
+    This site is a minimalistic site.
+    You can make modifications to the site by forking the repository.
+    To help make site better you can add functionality to the site.
+    You can also add css to the site. (when you add css or js on this for making PR on main repository use "/static/(js|css)file.(js|css)" as path for file)
+    (I will create the static route and update the site if your version is a good improvement to existing project.)
+</footer>
+
+</body>
+</html>
