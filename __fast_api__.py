@@ -1,5 +1,5 @@
 import os
-from typing import List, Any
+from typing import List
 import uvicorn
 from fastapi import FastAPI, Request, Response, UploadFile, Form
 from fastapi.responses import RedirectResponse, FileResponse
@@ -11,6 +11,7 @@ app = FastAPI()
 
 
 @app.middleware('http')
+@app.middleware('https')
 async def middlewares(request: Request, handler):
     if (request.cookies.get('pass') == password) or (request.url.path == '/login'):
         response = await handler(request)
@@ -40,7 +41,7 @@ async def generate_page(path='./'):
             file_html += folder_base.format(path, f, f)
         else:
             file_html += files_base.format(path, f, f)
-    return html.format(file_html)
+    return html.format(file_html).replace('Â', '')
 
 
 @app.post('/upload')
@@ -100,8 +101,7 @@ async def file(request: Request):
                    .replace(replace_some_string_empty.lower(), '')
                    .replace(replace_some_string_empty.replace('/', '\\'), '')
                    .replace(replace_some_string_empty.replace('/', '\\').lower(), ''))
-        download_mode = ['exe', 'pyc', 'msi', 'py<module>   s   úú', 'py<module>súú']
-
+        download_mode = ['exe', 'pyc', 'msi', 'lib', 'dll']
         extension = content.split('.')[-1]
         filename = filename.split('/')[-1]
         print('end : "', extension, '"', sep='')
@@ -116,7 +116,7 @@ async def file(request: Request):
         resp = FileResponse(request.query_params['file'],
                             headers={
                                 "Content-Disposition": f'attachment; filename="{request.query_params["file"].split("/")[-1]}"'})
-        regular = ['png', 'jpg', 'jpeg']
+        regular = ['png', 'jpg', 'jpeg', 'mp4', 'mp3']
         if request.query_params['file'].split('.')[-1] in regular:
             resp = FileResponse(request.query_params['file'])
         return resp
@@ -134,7 +134,7 @@ async def login(request: Request):
         response.set_cookie(
             key='pass',
             value=password,
-            max_age=None,
+            max_age=600,
             path='/',
             secure=True,
             httponly=True,
@@ -143,10 +143,6 @@ async def login(request: Request):
     return Response(
         content="<form method='GET' action='/login'><input type='text' name='password' id='password' 'placeholder='password' autocomplete='off' /></form>",
         headers={'content-type': 'text/html'})
-
-
-def add_roures():
-    pass
 
 
 app.add_api_route("/", index, methods=['GET', 'POST'])
