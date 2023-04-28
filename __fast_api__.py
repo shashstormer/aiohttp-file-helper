@@ -8,6 +8,7 @@ from files import folder_base, files_base
 password = os.environ.get('file_manager_password', 'password')
 replace_some_string_empty = os.environ.get('file_manager_replace_string', '')
 app = FastAPI()
+html_mime = 'text/html'
 
 
 @app.middleware('http')
@@ -25,8 +26,8 @@ async def middlewares(request: Request, handler):
 @app.post('/')
 async def index(_: Request):
     """Render the file navigator interface"""
-    return Response(content=(await generate_page(path='./')), headers={'content-type': 'text/html'},
-                    media_type='text/html')
+    return Response(content=(await generate_page(path='./')), headers={'content-type': html_mime},
+                    media_type=html_mime)
 
 
 async def generate_page(path='./'):
@@ -142,7 +143,7 @@ async def login(request: Request):
         return response
     return Response(
         content="<form method='GET' action='/login'><input type='text' name='password' id='password' 'placeholder='password' autocomplete='off' /></form>",
-        headers={'content-type': 'text/html'})
+        headers={'content-type': html_mime})
 
 
 app.add_api_route("/", index, methods=['GET', 'POST'])
