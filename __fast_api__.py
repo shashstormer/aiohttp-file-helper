@@ -5,21 +5,8 @@ from fastapi import FastAPI, Request, Response, UploadFile, Form
 from fastapi.responses import RedirectResponse, FileResponse
 from files import folder_base, files_base
 
-password = os.environ.get('file_manager_password', 'password')
-replace_some_string_empty = os.environ.get('file_manager_replace_string', '')
 app = FastAPI()
 html_mime = 'text/html'
-
-
-@app.middleware('http')
-@app.middleware('https')
-async def middlewares(request: Request, handler):
-    if (request.cookies.get('pass') == password) or (request.url.path == '/login'):
-        response = await handler(request)
-        return response
-    else:
-        response = RedirectResponse('/login', status_code=303)
-        return response
 
 
 @app.get('/')
@@ -97,11 +84,7 @@ async def delete(filename: str = Form()):
 async def file(request: Request):
     try:
         filename = request.query_params['file']
-        content = (open(filename).read()
-                   .replace(replace_some_string_empty, '')
-                   .replace(replace_some_string_empty.lower(), '')
-                   .replace(replace_some_string_empty.replace('/', '\\'), '')
-                   .replace(replace_some_string_empty.replace('/', '\\').lower(), ''))
+        content = open(filename).read()
         download_mode = ['exe', 'pyc', 'msi', 'lib', 'dll']
         extension = content.split('.')[-1]
         filename = filename.split('/')[-1]
@@ -117,7 +100,7 @@ async def file(request: Request):
         resp = FileResponse(request.query_params['file'],
                             headers={
                                 "Content-Disposition": f'attachment; filename="{request.query_params["file"].split("/")[-1]}"'})
-        regular = ['png', 'jpg', 'jpeg', 'mp4', 'mp3']
+        regular = ['png', 'jpg', 'jpeg', 'mp4', 'mp3', 'mkv']
         if request.query_params['file'].split('.')[-1] in regular:
             resp = FileResponse(request.query_params['file'])
         return resp
@@ -128,30 +111,11 @@ async def folders(request: Request):
     return Response(content=await generate_page(request.query_params['folder']), headers={'content-type': 'text/html'})
 
 
-@app.get('/login')
-async def login(request: Request):
-    if request.query_params.get('password') == password or request.cookies.get('pass') == password:
-        response = RedirectResponse('/', status_code=303)
-        response.set_cookie(
-            key='pass',
-            value=password,
-            max_age=600,
-            path='/',
-            secure=True,
-            httponly=True,
-            samesite='strict', )
-        return response
-    return Response(
-        content="<form method='GET' action='/login'><input type='text' name='password' id='password' 'placeholder='password' autocomplete='off' /></form>",
-        headers={'content-type': html_mime})
-
-
 app.add_api_route("/", index, methods=['GET', 'POST'])
 app.add_api_route("/upload", upload, methods=['POST'])
 app.add_api_route("/delete", delete, methods=['POST'])
 app.add_api_route("/file", file, methods=['GET'])
 app.add_api_route("/folder", folders, methods=['GET'])
-app.add_api_route("/login", login, methods=['GET'])
 
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=5080)
