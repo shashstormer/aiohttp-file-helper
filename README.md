@@ -25,7 +25,7 @@ The aiohttp server file needs to be updated
 <u>**_Using :_**</u>
 <ol>
 <li>
-Create a project on vercel or any other service (you can fork and use the forked version it is optional)
+you can run it on local and use it on LAN (it has been tested on vercel and was not working)
 </li>
 <li>
 you can visit the hosted site and you can see the functions(upload, delete, open)
