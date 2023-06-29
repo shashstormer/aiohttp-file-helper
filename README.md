@@ -2,7 +2,7 @@
 
 This was made for personal use primarily and I 
 thought let others also use it, so I made this repo
-public it has minimal functionality and protection (just a password).
+public it has minimal functionality.
 
 It was created for transferring files across devices.
 
@@ -28,16 +28,9 @@ The aiohttp server file needs to be updated
 Create a project on vercel or any other service (you can fork and use the forked version it is optional)
 </li>
 <li>
-Set environment variable(s) (<b>file_manager_password</b>, <i>file_manager_replace_string</i>)
-</li>
-<li>
-you can visit the hosted site there will be a box at the top left corrnor enter your password there, and you can see the functions(upload, delete, open)
+you can visit the hosted site and you can see the functions(upload, delete, open)
 </li>
 </ol>
 note:
 
-the second env variable is for replacing a string in all files delivered to empty string ' '
-
-i.e. if your second var is "xyz" and file content is "wxyz" the only "w" will be delivered
-
-if you don't set the password environment variable then it will be 'password'
+you may stream mp4 and some other files but you will not be able to skip to parts and skipping will play the video from the start
