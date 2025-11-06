@@ -1,4 +1,4 @@
-aiohttp==3.8.4
+aiohttp==3.8.5
 uvicorn==0.22.0
 fastapi==0.95.1
 starlette>=0.49.1 # not directly required, pinned by Snyk to avoid a vulnerability
